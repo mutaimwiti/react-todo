@@ -27,13 +27,19 @@ export default class Tasks extends Component{
     };
 
     handleUpdateQuery = (query) => {
-        const patterns = query.split(' ');
-        const results = this.state.tasks.filter((task) => {
+        const patterns = (query.toLowerCase()).split(' ');
+
+        const results = this.state.tasks.filter(({status, title}) => {
+            status = status.toLowerCase();
+            title = title.toLowerCase();
+
             for (let pattern of patterns) {
-                if (task.status.includes(pattern)) return true;
+                if (status.includes(pattern) || title.includes(pattern)) return true;
             }
+
             return false;
         });
+
         this.setState({results})
     };
 
@@ -50,7 +56,7 @@ export default class Tasks extends Component{
     render() {
         return (
             <>
-                <Search defaultQuery={'pending'} onUpdateQuery={this.handleUpdateQuery}/>
+                <Search onUpdateQuery={this.handleUpdateQuery}/>
                 {this.state.results.map(task =>
                     <Task key={task.id} task={task} onUpdateStatus={this.handleUpdateStatus}/>)}
             </>
