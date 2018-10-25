@@ -27,7 +27,13 @@ export default class Tasks extends Component{
     };
 
     handleUpdateQuery = (query) => {
-        const results = this.state.tasks.filter(task => task.status === query);
+        const patterns = query.split(' ');
+        const results = this.state.tasks.filter((task) => {
+            for (let pattern of patterns) {
+                if (task.status.includes(pattern)) return true;
+            }
+            return false;
+        });
         this.setState({results})
     };
 
