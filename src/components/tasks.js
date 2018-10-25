@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Task from "./task";
 import Search from "./search";
+import Create from "./create";
 
 export default class Tasks extends Component{
     STATUS_MAP = {
@@ -12,7 +13,7 @@ export default class Tasks extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            latest: 4,
+            autoIncrement: 3,
             tasks: [
                 {id: 1, title: 'Cook', status: 'pending'},
                 {id: 2, title: 'Code', status: 'started'},
@@ -25,6 +26,13 @@ export default class Tasks extends Component{
     componentDidMount() {
         this.setState({results: this.state.tasks})
     }
+
+    handleAddTask = (value) => {
+        let {tasks, autoIncrement} = this.state;
+        autoIncrement += 1;
+        tasks.push({id: autoIncrement, title: value, status: 'pending'});
+        this.setState({tasks, autoIncrement});
+    };
 
     handleUpdateQuery = (query) => {
         this.setState({query});
@@ -59,6 +67,7 @@ export default class Tasks extends Component{
     render() {
         return (
             <>
+                <Create onAddTask={this.handleAddTask}/>
                 <Search onUpdateQuery={this.handleUpdateQuery}/>
                 {this.filterTasks().map(task =>
                     <Task key={task.id}
